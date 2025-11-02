@@ -8,7 +8,7 @@ import joy_market.handlers.RegisterHandler;
 public class RegisterWindow {
     private RegisterHandler handler = new RegisterHandler();
 
-    public void start(Stage stage) {
+    public void show(Stage stage) {
         stage.setTitle("JoymarKet - Register");
 
         Label lblTitle = new Label("Register Account");
@@ -38,6 +38,13 @@ public class RegisterWindow {
 
         Button btnRegister = new Button("Register");
         Label lblMessage = new Label();
+        
+        Label lblLink = new Label("Already have an account? Login here");
+        lblLink.setStyle("-fx-text-fill: blue; -fx-underline: true;");
+        lblLink.setOnMouseClicked(e -> {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.show(stage);
+        });
 
         btnRegister.setOnAction(e -> {
             String msg = handler.saveDataUser(
@@ -56,7 +63,7 @@ public class RegisterWindow {
                 lblTitle,
                 txtName, txtEmail, txtPassword, txtConfirm,
                 txtPhone, txtAddress, cmbGender,
-                btnRegister, lblMessage
+                btnRegister, lblMessage, lblLink
         );
         root.setStyle("-fx-padding: 20; -fx-alignment: center;");
 

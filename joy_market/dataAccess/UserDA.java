@@ -44,4 +44,32 @@ public class UserDA {
         }
         return false;
     }
+    
+    public static User getUserByEmailAndPassword(String email, String password) {
+        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new User(
+                    rs.getInt("id"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("full_name"),
+                    rs.getString("phone"),
+                    rs.getString("address"),
+                    rs.getString("gender"),
+                    rs.getLong("balance")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
