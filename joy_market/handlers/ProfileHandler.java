@@ -62,10 +62,6 @@ public class ProfileHandler {
             updatedFields.append("password, ");
             updatedSomething = true;
         }
-        
-        System.out.println(admin.getPassword());
-        System.out.println(admin.getEmail());
-        System.out.println(admin.getId());
 
         boolean success = AdminDA.updateAdmin(admin);
         if (success) {
