@@ -20,6 +20,10 @@ public class LoginWindow {
 
         PasswordField txtPassword = new PasswordField();
         txtPassword.setPromptText("Password");
+        
+        ComboBox<String> cmbRole = new ComboBox<>();
+        cmbRole.getItems().addAll("Customer", "Admin", "Courier");
+        cmbRole.setPromptText("Select Role");
 
         Button btnLogin = new Button("Login");
         Label lblMessage = new Label();
@@ -33,13 +37,14 @@ public class LoginWindow {
 
         btnLogin.setOnAction(e -> {
             String msg = handler.handleLogin(
-                txtEmail.getText(),
-                txtPassword.getText()
+                    txtEmail.getText(),
+                    txtPassword.getText(),
+                    cmbRole.getValue()
             );
             lblMessage.setText(msg);
         });
 
-        VBox root = new VBox(10, lblTitle, txtEmail, txtPassword, btnLogin, lblMessage, lblLink);
+        VBox root = new VBox(10, lblTitle, txtEmail, txtPassword, cmbRole, btnLogin, lblMessage, lblLink);
         root.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
         Scene scene = new Scene(root, 350, 300);

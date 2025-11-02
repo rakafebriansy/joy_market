@@ -98,3 +98,16 @@ CREATE TABLE topups (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+-- Data for admins
+INSERT INTO admins (email, password)
+VALUES
+('admin@joymarket.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'); 
+-- password: "password"
+
+-- Data for couriers
+INSERT INTO couriers (email, password)
+VALUES
+('courier1@joymarket.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
+('courier2@joymarket.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
+-- password: "password"
