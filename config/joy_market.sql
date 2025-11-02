@@ -27,20 +27,13 @@ CREATE TABLE users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE categories (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100) NOT NULL UNIQUE
-);
-
 CREATE TABLE products (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  category_id INT,
   price BIGINT NOT NULL,
   stock INT NOT NULL DEFAULT 0,
   is_fresh BOOLEAN DEFAULT TRUE,
-  description TEXT,
-  FOREIGN KEY (category_id) REFERENCES categories(id)
+  description TEXT
 );
 
 CREATE TABLE promos (
