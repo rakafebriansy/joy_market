@@ -11,7 +11,7 @@ import joy_market.utils.Validator;
 
 public class LoginHandler {
 
-	public String handleLogin(String email, String password, String role) {
+	public Object handleLogin(String email, String password, String role) {
         if (Validator.isEmpty(email)) return "Email cannot be empty!";
         if (Validator.isEmpty(password)) return "Password cannot be empty!";
         if (Validator.isEmpty(role)) return "Please select role!";
@@ -22,20 +22,20 @@ public class LoginHandler {
             case "CUSTOMER": {
                 User user = UserDA.getUserByEmailAndPassword(email, hashed);
                 if (user == null) return "Customer account not found!";
-                return "Login successful! Welcome, " + user.getFullName();
+                return user;
             }
             case "ADMIN": {
                 Admin admin = AdminDA.getAdminByEmailAndPassword(email, hashed);
                 if (admin == null) return "Admin account not found!";
-                return "Login successful! Welcome, Admin!";
+                return admin;
             }
             case "COURIER": {
                 Courier courier = CourierDA.getCourierByEmailAndPassword(email, hashed);
                 if (courier == null) return "Courier account not found!";
-                return "Login successful! Welcome, Courier!";
+                return courier;
             }
             default:
-                return "Invalid role!";
+                return null;
         }
     }
 }

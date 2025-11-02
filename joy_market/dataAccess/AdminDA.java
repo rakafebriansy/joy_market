@@ -20,6 +20,7 @@ public class AdminDA {
 
             if (rs.next()) {
                 return new Admin(
+                	rs.getInt("id"),
                     rs.getString("email"),
                     rs.getString("password")
                 );
@@ -29,4 +30,32 @@ public class AdminDA {
         }
         return null;
     }
+    
+    public static boolean updateAdmin(Admin admin) {
+        StringBuilder sql = new StringBuilder("UPDATE admins SET email=?");
+        boolean updatePassword = (admin.getPassword() != null && !admin.getPassword().isEmpty());
+
+        if (updatePassword) sql.append(", password=?");
+        sql.append(" WHERE id=?");
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            stmt.setString(1, admin.getEmail());
+
+            int index = 2;
+            if (updatePassword) {
+                stmt.setString(index++, admin.getPassword());
+            }
+
+            stmt.setInt(index, admin.getId());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

@@ -1,10 +1,15 @@
 package joy_market.windows;
 
 import javafx.scene.Scene;
+
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import joy_market.handlers.LoginHandler;
+import joy_market.windows.AdminMainWindow;
+import joy_market.models.Admin;
+import joy_market.models.Courier;
+import joy_market.models.User;
 
 public class LoginWindow {
     private LoginHandler handler = new LoginHandler();
@@ -36,13 +41,37 @@ public class LoginWindow {
         });
 
         btnLogin.setOnAction(e -> {
-            String msg = handler.handleLogin(
-                    txtEmail.getText(),
-                    txtPassword.getText(),
-                    cmbRole.getValue()
+            Object res = handler.handleLogin(
+                txtEmail.getText(),
+                txtPassword.getText(),
+                cmbRole.getValue()
             );
-            lblMessage.setText(msg);
+
+            if (res instanceof String) {
+                // Pesan error
+                lblMessage.setText((String) res);
+                lblMessage.setStyle("-fx-text-fill: red;");
+                return;
+            }
+
+            Stage newStage = new Stage();
+            stage.close();
+
+            switch (cmbRole.getValue().toUpperCase()) {
+                case "ADMIN":
+                    new AdminMainWindow((Admin) res).show(newStage);
+                    break;
+
+//                case "COURIER":
+//                    new CourierMainWindow((Courier) res).show(newStage);
+//                    break;
+//
+//                case "CUSTOMER":
+//                    new CustomerMainWindow((User) res).show(newStage);
+//                    break;
+            }
         });
+
 
         VBox root = new VBox(10, lblTitle, txtEmail, txtPassword, cmbRole, btnLogin, lblMessage, lblLink);
         root.setStyle("-fx-padding: 20; -fx-alignment: center;");

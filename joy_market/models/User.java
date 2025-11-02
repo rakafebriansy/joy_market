@@ -31,5 +31,13 @@ public class User {
     public String getGender() { return gender; }
     public long getBalance() { return balance; }
 
+    public void setId(int id) { this.id = id; }
+    public void setEmail(String email) { this.email = email; }
+    public void setPassword(String password) { this.password = password; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public void setAddress(String address) { this.address = address; }
+    public void setGender(String gender) { this.gender = gender; }
     public void setBalance(long balance) { this.balance = balance; }
+
 }

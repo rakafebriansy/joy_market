@@ -23,7 +23,8 @@ CREATE TABLE users (
   phone VARCHAR(20) NOT NULL,
   address TEXT NOT NULL,
   gender ENUM('MALE','FEMALE','OTHER'),
-  balance BIGINT DEFAULT 0
+  balance BIGINT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE categories (
