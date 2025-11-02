@@ -5,8 +5,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import joy_market.handlers.RegisterHandler;
-import joy_market.utils.Validator;
-
 public class RegisterWindow {
     private RegisterHandler handler = new RegisterHandler();
 
@@ -42,7 +40,7 @@ public class RegisterWindow {
         Label lblMessage = new Label();
 
         btnRegister.setOnAction(e -> {
-            String msg = handler.handleRegister(
+            String msg = handler.saveDataUser(
                 txtName.getText(),
                 txtEmail.getText(),
                 txtPassword.getText(),
