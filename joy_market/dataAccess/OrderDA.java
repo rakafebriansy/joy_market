@@ -134,5 +134,29 @@ public class OrderDA {
         }
     }
 
+    public static List<Order> getOrdersByCourierId(int courierId) {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE courier_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            stmt.setInt(1, courierId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Order o = new Order(
+                            rs.getInt("id"),
+                            rs.getInt("user_id"),
+                            rs.getBoolean("promo"),
+                            rs.getLong("total_price"),
+                            rs.getString("status"),
+                            rs.getObject("courier_id") != null ? rs.getInt("courier_id") : null
+                    );
+                    orders.add(o);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
 }

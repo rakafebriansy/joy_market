@@ -22,6 +22,7 @@ public class OrderTableItem {
         this.courierId = new SimpleIntegerProperty(order.getCourierId() != null ? order.getCourierId() : 0);
     }
     
+    public IntegerProperty idProperty() { return id; }
     public StringProperty customerNameProperty() { return customerName; }
     public StringProperty statusProperty() { return status; }
     public StringProperty totalPriceProperty() { return new SimpleStringProperty(String.valueOf(totalPrice.get()));}
