@@ -36,16 +36,6 @@ CREATE TABLE products (
   description TEXT
 );
 
-CREATE TABLE promos (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  code VARCHAR(50) NOT NULL UNIQUE,
-  percentage INT DEFAULT 0,
-  flat_amount BIGINT DEFAULT 0,
-  valid_from DATE,
-  valid_to DATE,
-  active BOOLEAN DEFAULT TRUE
-);
-
 CREATE TABLE carts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL UNIQUE,
@@ -65,13 +55,12 @@ CREATE TABLE cart_items (
 CREATE TABLE orders (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
-  promo_id INT NULL,
+  promo BOOLEAN DEFAULT FALSE,
   total_price BIGINT NOT NULL,
-  status ENUM('PENDING','PAID','ASSIGNED','IN_PROGRESS','DELIVERED','CANCELLED') DEFAULT 'PENDING',
+  status ENUM('PENDING','IN_PROGRESS','DELIVERED') DEFAULT 'PENDING',
   courier_id INT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (promo_id) REFERENCES promos(id),
   FOREIGN KEY (courier_id) REFERENCES couriers(id)
 );
 
@@ -85,14 +74,6 @@ CREATE TABLE order_items (
   FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
-CREATE TABLE topups (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  amount BIGINT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
 -- Data for admins
 INSERT INTO admins (email, password)
 VALUES
@@ -104,4 +85,14 @@ INSERT INTO couriers (email, password)
 VALUES
 ('courier1@joymarket.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
 ('courier2@joymarket.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
+-- password: "password"
+
+-- Data for users
+INSERT INTO users (email, password, full_name, phone, address, gender, balance)
+VALUES
+('alice@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'Alice Johnson', '081234567890', 'Jl. Merdeka No.1, Jakarta', 'FEMALE', 500000),
+('bob@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'Bob Smith', '081234567891', 'Jl. Sudirman No.2, Jakarta', 'MALE', 750000),
+('carol@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'Carol Davis', '081234567892', 'Jl. Thamrin No.3, Jakarta', 'FEMALE', 300000),
+('david@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'David Lee', '081234567893', 'Jl. Gatot Subroto No.4, Jakarta', 'MALE', 1000000),
+('erin@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'Erin White', '081234567894', 'Jl. H.R. Rasuna Said No.5, Jakarta', 'FEMALE', 250000);
 -- password: "password"

@@ -89,4 +89,27 @@ public class ProductDA {
         }
         return list;
     }
+    public static Product getProductById(int id) {
+        String sql = "SELECT * FROM products WHERE id=?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Product(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getLong("price"),
+                            rs.getInt("stock"),
+                            rs.getBoolean("is_fresh"),
+                            rs.getString("description")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

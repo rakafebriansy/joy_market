@@ -65,10 +65,10 @@ public class LoginWindow {
 //                case "COURIER":
 //                    new CourierMainWindow((Courier) res).show(newStage);
 //                    break;
-//
-//                case "CUSTOMER":
-//                    new CustomerMainWindow((User) res).show(newStage);
-//                    break;
+
+                case "CUSTOMER":
+                    new UserMainWindow((User) res).show(newStage);
+                    break;
             }
         });
 

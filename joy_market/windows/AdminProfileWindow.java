@@ -39,7 +39,8 @@ public class AdminProfileWindow {
             String confirm = txtConfirm.getText().trim();
 
             String result = handler.handleUpdateProfile(admin, "ADMIN", newPass, confirm);
-            lblMsg.setText(result);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, result, ButtonType.OK);
+            alert.showAndWait();
         });
 
         root.getChildren().addAll(

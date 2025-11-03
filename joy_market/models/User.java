@@ -1,5 +1,7 @@
 package joy_market.models;
 
+import javafx.beans.property.*;
+
 public class User {
     private int id;
     private String email;
@@ -8,7 +10,7 @@ public class User {
     private String phone;
     private String address;
     private String gender;
-    private long balance;
+    private LongProperty balance;
 
     public User(int id, String email, String password, String fullName,
                 String phone, String address, String gender, long balance) {
@@ -19,7 +21,7 @@ public class User {
         this.phone = phone;
         this.address = address;
         this.gender = gender;
-        this.balance = balance;
+        this.balance = new SimpleLongProperty(balance);
     }
 
     public int getId() { return id; }
@@ -29,7 +31,9 @@ public class User {
     public String getPhone() { return phone; }
     public String getAddress() { return address; }
     public String getGender() { return gender; }
-    public long getBalance() { return balance; }
+    public long getBalance() { return balance.get(); }
+    
+    public LongProperty balanceProperty() { return balance; }
 
     public void setId(int id) { this.id = id; }
     public void setEmail(String email) { this.email = email; }
@@ -38,6 +42,6 @@ public class User {
     public void setPhone(String phone) { this.phone = phone; }
     public void setAddress(String address) { this.address = address; }
     public void setGender(String gender) { this.gender = gender; }
-    public void setBalance(long balance) { this.balance = balance; }
+    public void setBalance(long value) { balance.set(value); }
 
 }

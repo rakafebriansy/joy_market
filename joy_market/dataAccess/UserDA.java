@@ -73,7 +73,7 @@ public class UserDA {
     }
     
     public static boolean updateUser(User user) {
-        String sql = "UPDATE users SET full_name=?, email=?, phone=?, address=?, gender=?, password=? WHERE id=?";
+        String sql = "UPDATE users SET full_name=?, email=?, phone=?, address=?, gender=?, password=?, balance=? WHERE id=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -83,7 +83,8 @@ public class UserDA {
             stmt.setString(4, user.getAddress());
             stmt.setString(5, user.getGender());
             stmt.setString(6, user.getPassword());
-            stmt.setInt(7, user.getId());
+            stmt.setLong(7, user.getBalance());
+            stmt.setInt(8, user.getId());
 
             return stmt.executeUpdate() > 0;
 
@@ -91,6 +92,38 @@ public class UserDA {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    public static User getUserById(int id) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("full_name"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getString("gender"),
+                        rs.getLong("balance")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getUserNameById(int id) {
+        User user = getUserById(id);
+        return (user != null) ? user.getFullName() : "Unknown";
     }
 
 }
