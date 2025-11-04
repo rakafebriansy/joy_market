@@ -2,7 +2,7 @@ package joy_market.models;
 
 import javafx.beans.property.*;
 
-public class User {
+public class Customer {
     private int id;
     private String email;
     private String password;
@@ -12,7 +12,7 @@ public class User {
     private String gender;
     private LongProperty balance;
 
-    public User(int id, String email, String password, String fullName,
+    public Customer(int id, String email, String password, String fullName,
                 String phone, String address, String gender, long balance) {
         this.id = id;
         this.email = email;

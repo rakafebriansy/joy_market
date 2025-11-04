@@ -1,10 +1,10 @@
 package joy_market.dataAccess;
 
 import joy_market.core.DBConnection;
-import joy_market.models.User;
+import joy_market.models.Customer;
 import java.sql.*;
 
-public class UserDA {
+public class CustomerDA {
 
     public static boolean isEmailExist(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
@@ -23,7 +23,7 @@ public class UserDA {
         return false;
     }
 
-    public static boolean saveDA(User user) {
+    public static boolean saveDA(Customer user) {
         String sql = "INSERT INTO users (email, password, full_name, phone, address, gender, balance) "
                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -45,7 +45,7 @@ public class UserDA {
         return false;
     }
     
-    public static User getUserByEmailAndPassword(String email, String password) {
+    public static Customer getUserByEmailAndPassword(String email, String password) {
         String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -55,7 +55,7 @@ public class UserDA {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return new User(
+                return new Customer(
                     rs.getInt("id"),
                     rs.getString("email"),
                     rs.getString("password"),
@@ -72,7 +72,7 @@ public class UserDA {
         return null;
     }
     
-    public static boolean updateUser(User user) {
+    public static boolean updateUser(Customer user) {
         String sql = "UPDATE users SET full_name=?, email=?, phone=?, address=?, gender=?, password=?, balance=? WHERE id=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -95,7 +95,7 @@ public class UserDA {
     }
 
 
-    public static User getUserById(int id) {
+    public static Customer getUserById(int id) {
         String sql = "SELECT * FROM users WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -103,7 +103,7 @@ public class UserDA {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new User(
+                return new Customer(
                         rs.getInt("id"),
                         rs.getString("email"),
                         rs.getString("password"),
@@ -122,7 +122,7 @@ public class UserDA {
     }
 
     public static String getUserNameById(int id) {
-        User user = getUserById(id);
+        Customer user = getUserById(id);
         return (user != null) ? user.getFullName() : "Unknown";
     }
 

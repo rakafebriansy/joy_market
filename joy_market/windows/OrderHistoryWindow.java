@@ -4,7 +4,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.collections.*;
 import javafx.geometry.Insets;
-import joy_market.models.User;
+import joy_market.models.Customer;
 import joy_market.models.Order;
 import joy_market.widgets.OrderHistoryTableItem;
 import joy_market.dataAccess.OrderDA;
@@ -13,10 +13,10 @@ import java.util.List;
 
 public class OrderHistoryWindow {
 
-    private User user;
+    private Customer user;
     private TableView<OrderHistoryTableItem> table;
 
-    public OrderHistoryWindow(User user) {
+    public OrderHistoryWindow(Customer user) {
         this.user = user;
     }
 

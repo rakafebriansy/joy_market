@@ -10,17 +10,17 @@ import java.util.List;
 
 import joy_market.models.*;
 import joy_market.dataAccess.*;
-import joy_market.handlers.CartHandler;
+import joy_market.handlers.CartItemHandler;
 import joy_market.handlers.ProfileHandler;
 import joy_market.utils.Validator;
 import joy_market.widgets.OrderHistoryTableItem;
 
-public class UserMainWindow {
+public class ProductWindow {
 
-    private User user;
+    private Customer user;
     private ProfileHandler profileHandler = new ProfileHandler();
 
-    public UserMainWindow(User user) {
+    public ProductWindow(Customer user) {
         this.user = user;
     }
     
@@ -89,7 +89,7 @@ public class UserMainWindow {
                 long amt = Long.parseLong(txtAmount.getText());
                 if (amt <= 0) throw new Exception();
                 user.setBalance(user.getBalance() + amt);
-                boolean a = UserDA.updateUser(user);
+                boolean a = CustomerDA.updateUser(user);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Top up successful!", ButtonType.OK);
                 alert.showAndWait();
             } catch (Exception ex) {
@@ -159,7 +159,7 @@ public class UserMainWindow {
         TableView<CartItem> tblCart = new TableView<>();
         TableColumn<CartItem, String> colName = new TableColumn<>("Product");
         colName.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(
-                ProductDA.getProductById(c.getValue().getProductId()).getName()));
+                ProductDA.read(c.getValue().getProductId()).getName()));
 
         TableColumn<CartItem, String> colCount = new TableColumn<>("Qty");
         colCount.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(
@@ -167,7 +167,7 @@ public class UserMainWindow {
 
         TableColumn<CartItem, String> colPrice = new TableColumn<>("Price");
         colPrice.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(
-                String.valueOf(ProductDA.getProductById(c.getValue().getProductId()).getPrice() * c.getValue().getCount())));
+                String.valueOf(ProductDA.read(c.getValue().getProductId()).getPrice() * c.getValue().getCount())));
 
         tblCart.getColumns().addAll(colName, colCount, colPrice);
 
@@ -178,7 +178,7 @@ public class UserMainWindow {
         btnRemoveItem.setOnAction(e -> {
             CartItem selected = tblCart.getSelectionModel().getSelectedItem();
             if (selected != null) {
-                boolean success = CartHandler.removeCartItem(selected.getId());
+                boolean success = CartItemHandler.removeCartItem(selected.getId());
                 if (success) refreshCartTable(tblCart);
                 else showAlert("Failed to remove item!");
             }
@@ -186,7 +186,7 @@ public class UserMainWindow {
 
         Button btnClearCart = new Button("Clear Cart");
         btnClearCart.setOnAction(e -> {
-            boolean success = CartHandler.clearCart(this.user.getId());
+            boolean success = CartItemHandler.clearCart(this.user.getId());
             if (success) refreshCartTable(tblCart);
             else showAlert("Failed to clear cart!");
         });
@@ -195,7 +195,7 @@ public class UserMainWindow {
         Button btnPay = new Button("Pay");
         btnPay.setOnAction(e -> {
             long total = items.stream().mapToLong(i ->
-                    ProductDA.getProductById(i.getProductId()).getPrice() * i.getCount()
+                    ProductDA.read(i.getProductId()).getPrice() * i.getCount()
             ).sum();
 
             if (user.getBalance() >= total) {
@@ -204,7 +204,7 @@ public class UserMainWindow {
                 int orderId = OrderDA.insertOrder(user.getId(), total);
                 
                 for (CartItem item : items) {
-                    Product p = ProductDA.getProductById(item.getProductId());
+                    Product p = ProductDA.read(item.getProductId());
                     OrderDA.insertOrderItem(orderId, p.getId(), item.getCount(), p.getPrice());
                     
                     int newStock = p.getStock() - item.getCount();
@@ -214,7 +214,7 @@ public class UserMainWindow {
                     ProductDA.updateProductStock(p.getId(), newStock);
                 }
                 
-                boolean a = UserDA.updateUser(user);
+                boolean a = CustomerDA.updateUser(user);
                 System.out.println(a);
                 CartDA.clearCart(user.getId());
                 

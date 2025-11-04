@@ -2,10 +2,10 @@ package joy_market.handlers;
 
 import joy_market.dataAccess.AdminDA;
 import joy_market.dataAccess.CourierDA;
-import joy_market.dataAccess.UserDA;
+import joy_market.dataAccess.CustomerDA;
 import joy_market.models.Admin;
 import joy_market.models.Courier;
-import joy_market.models.User;
+import joy_market.models.Customer;
 import joy_market.utils.PasswordHelper;
 import joy_market.utils.Validator;
 
@@ -20,7 +20,7 @@ public class LoginHandler {
 
         switch (role.toUpperCase()) {
             case "CUSTOMER": {
-                User user = UserDA.getUserByEmailAndPassword(email, hashed);
+                Customer user = CustomerDA.getUserByEmailAndPassword(email, hashed);
                 if (user == null) return "Customer account not found!";
                 return user;
             }

@@ -1,11 +1,11 @@
 package joy_market.handlers;
 
-import joy_market.dataAccess.UserDA;
-import joy_market.models.User;
+import joy_market.dataAccess.CustomerDA;
+import joy_market.models.Customer;
 import joy_market.utils.PasswordHelper;
 import joy_market.utils.Validator;
 
-public class RegisterHandler {
+public class UserHandler {
 
     public String saveDataUser(String fullName, String email, String pass, String confirm,
             String phone, String address, String gender) {
@@ -20,12 +20,12 @@ public class RegisterHandler {
 		if (Validator.isEmpty(address)) return "Address cannot be empty!";
 		if (gender == null) return "Gender must be selected!";
 		
-		if (UserDA.isEmailExist(email)) return "Email already registered!";
+		if (CustomerDA.isEmailExist(email)) return "Email already registered!";
 		
 		String hashedPass = PasswordHelper.hashPassword(pass);
-		User user = new User(0, email, hashedPass, fullName, phone, address, gender, 0);
+		Customer user = new Customer(0, email, hashedPass, fullName, phone, address, gender, 0);
 		
-		boolean success = UserDA.saveDA(user);
+		boolean success = CustomerDA.saveDA(user);
 		return success ? "Registration successful!" : "Registration failed. Try again.";
 		}
 }

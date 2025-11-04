@@ -11,7 +11,7 @@ public class ProfileHandler {
 
         switch (role.toUpperCase()) {
             case "CUSTOMER":
-                return updateUserProfile((User) userObj, newPassword, confirmPassword);
+                return updateUserProfile((Customer) userObj, newPassword, confirmPassword);
             case "ADMIN":
                 return updateAdminProfile((Admin) userObj, newPassword, confirmPassword);
             case "COURIER":
@@ -21,7 +21,7 @@ public class ProfileHandler {
         }
     }
 
-    private String updateUserProfile(User user, String newPassword, String confirmPassword) {
+    private String updateUserProfile(Customer user, String newPassword, String confirmPassword) {
         if (Validator.isEmpty(user.getFullName())) return "Name cannot be empty!";
         if (Validator.isEmpty(user.getEmail())) return "Email cannot be empty!";
         if (!user.getEmail().contains("@")) return "Invalid email format!";
@@ -38,7 +38,7 @@ public class ProfileHandler {
             updatedSomething = true;
         }
 
-        if (UserDA.updateUser(user)) {
+        if (CustomerDA.updateUser(user)) {
             if (updatedSomething)
                 return "Updated " + updatedFields.substring(0, updatedFields.length() - 2) + " successfully!";
             else

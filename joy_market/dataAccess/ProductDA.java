@@ -89,7 +89,7 @@ public class ProductDA {
         }
         return list;
     }
-    public static Product getProductById(int id) {
+    public static Product read(int id) {
         String sql = "SELECT * FROM products WHERE id=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

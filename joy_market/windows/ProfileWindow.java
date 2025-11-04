@@ -24,7 +24,7 @@ public class ProfileWindow {
         PasswordField txtConfirmPass = new PasswordField();
 
         if (role.equalsIgnoreCase("CUSTOMER")) {
-            User u = (User) currentUser;
+            Customer u = (Customer) currentUser;
             txtEmail.setText(u.getEmail());
             txtName.setText(u.getFullName());
             txtPhone.setText(u.getPhone());
@@ -44,15 +44,15 @@ public class ProfileWindow {
         btnSave.setOnAction(e -> {
             String message;
             if (role.equalsIgnoreCase("CUSTOMER")) {
-                User updated = new User(
-                        ((User) currentUser).getId(),
+                Customer updated = new Customer(
+                        ((Customer) currentUser).getId(),
                         txtName.getText(),
                         txtEmail.getText(),
-                        ((User) currentUser).getPassword(),
+                        ((Customer) currentUser).getPassword(),
                         txtPhone.getText(),
                         txtAddress.getText(),
                         cmbGender.getValue(),
-                        ((User) currentUser).getBalance()
+                        ((Customer) currentUser).getBalance()
                 );
                 message = handler.handleUpdateProfile(updated, role, txtNewPass.getText(), txtConfirmPass.getText());
             } else if (role.equalsIgnoreCase("ADMIN")) {

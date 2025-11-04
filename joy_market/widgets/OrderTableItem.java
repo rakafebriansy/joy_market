@@ -2,7 +2,7 @@ package joy_market.widgets;
 
 import javafx.beans.property.*;
 import joy_market.models.Order;
-import joy_market.dataAccess.UserDA;
+import joy_market.dataAccess.CustomerDA;
 
 public class OrderTableItem {
     private IntegerProperty id;
@@ -15,7 +15,7 @@ public class OrderTableItem {
 
     public OrderTableItem(Order order) {
         this.id = new SimpleIntegerProperty(order.getId());
-        this.customerName = new SimpleStringProperty(UserDA.getUserById(order.getUserId()).getFullName());
+        this.customerName = new SimpleStringProperty(CustomerDA.getUserById(order.getUserId()).getFullName());
         this.status = new SimpleStringProperty(order.getStatus());
         this.totalPrice = new SimpleLongProperty(order.getTotalPrice());
         this.promo = new SimpleBooleanProperty(order.isPromo());

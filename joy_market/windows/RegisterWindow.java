@@ -4,9 +4,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import joy_market.handlers.RegisterHandler;
-public class RegisterWindow {
-    private RegisterHandler handler = new RegisterHandler();
+import joy_market.handlers.UserHandler;
+public class UserWindow {
+    private UserHandler handler = new UserHandler();
 
     public void show(Stage stage) {
         stage.setTitle("JoymarKet - Register");

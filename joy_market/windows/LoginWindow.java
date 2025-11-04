@@ -9,7 +9,7 @@ import joy_market.handlers.LoginHandler;
 import joy_market.windows.AdminMainWindow;
 import joy_market.models.Admin;
 import joy_market.models.Courier;
-import joy_market.models.User;
+import joy_market.models.Customer;
 
 public class LoginWindow {
     private LoginHandler handler = new LoginHandler();
@@ -36,8 +36,8 @@ public class LoginWindow {
         Label lblLink = new Label("Don't have an account? Register here");
         lblLink.setStyle("-fx-text-fill: blue; -fx-underline: true;");
         lblLink.setOnMouseClicked(e -> {
-            RegisterWindow registerWindow = new RegisterWindow();
-            registerWindow.show(stage);
+            UserWindow userWindow = new UserWindow();
+            userWindow.show(stage);
         });
 
         btnLogin.setOnAction(e -> {
@@ -67,7 +67,7 @@ public class LoginWindow {
                     break;
 
                 case "CUSTOMER":
-                    new UserMainWindow((User) res).show(newStage);
+                    new ProductWindow((Customer) res).show(newStage);
                     break;
             }
         });
