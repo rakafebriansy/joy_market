@@ -7,7 +7,7 @@ import javafx.geometry.Insets;
 import joy_market.models.Customer;
 import joy_market.models.Order;
 import joy_market.widgets.OrderHistoryTableItem;
-import joy_market.dataAccess.OrderDA;
+import joy_market.dataAccess.OrderHeaderDA;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class OrderHistoryWindow {
 
         table.getColumns().addAll(colId, colStatus, colTotal);
 
-        List<Order> orders = OrderDA.getOrdersByUserId(user.getId());
+        List<Order> orders = OrderHeaderDA.getOrdersByUserId(user.getId());
         ObservableList<OrderHistoryTableItem> items = FXCollections.observableArrayList();
         for (Order o : orders) {
             items.add(new OrderHistoryTableItem(
@@ -56,7 +56,7 @@ public class OrderHistoryWindow {
     }
     
     public void refresh() {
-        List<Order> orders = OrderDA.getOrdersByUserId(user.getId());
+        List<Order> orders = OrderHeaderDA.getOrdersByUserId(user.getId());
         ObservableList<OrderHistoryTableItem> items = FXCollections.observableArrayList();
         for (Order o : orders) {
             items.add(new OrderHistoryTableItem(o.getId(), o.getStatus(), o.getTotalPrice()));

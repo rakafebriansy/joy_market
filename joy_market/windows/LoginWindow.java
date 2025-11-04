@@ -63,7 +63,7 @@ public class LoginWindow {
                     break;
 
                 case "COURIER":
-                    new CourierMainWindow((Courier) res).show(newStage);
+                    new CourierWindow((Courier) res).show(newStage);
                     break;
 
                 case "CUSTOMER":

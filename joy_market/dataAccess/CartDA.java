@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartDA {
+public class CartItemDA {
 
     public static int getCartIdByUser(int userId) {
         String sql = "SELECT id FROM carts WHERE user_id=?";
@@ -19,10 +19,10 @@ public class CartDA {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return createCart(userId);
+        return createCartItem(userId);
     }
 
-    private static int createCart(int userId) {
+    private static int createCartItem(int userId) {
         String sql = "INSERT INTO carts(user_id) VALUES(?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -37,7 +37,7 @@ public class CartDA {
         return -1;
     }
 
-    public static boolean addProductToCart(int userId, int productId, int count) {
+    public static boolean saveDA(int userId, int productId, int count) {
         int cartId = getCartIdByUser(userId);
 
         String checkSql = "SELECT id, count FROM cart_items WHERE cart_id=? AND product_id=?";
@@ -108,7 +108,7 @@ public class CartDA {
         return false;
     }
     
-    public static boolean removeCartItem(int cartItemId) {
+    public static boolean deleteCartItem(int cartItemId) {
         String sql = "DELETE FROM cart_items WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

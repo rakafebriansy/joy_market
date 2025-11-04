@@ -23,7 +23,7 @@ public class ProductHandler {
                 : "Failed to add product!";
     }
 
-    public String handleUpdateProduct(Product product) {
+    public String editProduct(Product product) {
         return ProductDA.updateProduct(product)
                 ? "Product updated successfully!"
                 : "Failed to update product!";

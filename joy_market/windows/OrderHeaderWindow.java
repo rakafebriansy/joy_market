@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import joy_market.dataAccess.CourierDA;
-import joy_market.dataAccess.OrderDA;
+import joy_market.dataAccess.OrderHeaderDA;
 import joy_market.dataAccess.CustomerDA;
 import joy_market.models.Order;
 import joy_market.models.Courier;
@@ -67,7 +67,7 @@ public class OrderHeaderWindow {
     }
 
     private void refreshTable() {
-        List<Order> orders = OrderDA.getAllOrders();
+        List<Order> orders = OrderHeaderDA.getOrderHeader();
         ObservableList<OrderTableItem> items = FXCollections.observableArrayList();
 
         for (Order o : orders) {
@@ -102,7 +102,7 @@ public class OrderHeaderWindow {
         Optional<String> result = dlg.showAndWait();
         result.ifPresent(name -> {
             int courierId = nameToId.get(name);
-            OrderDA.assignCourier(selected.getId(), courierId);
+            OrderHeaderDA.assignCourier(selected.getId(), courierId);
             refreshTable();
         });
     }
@@ -121,7 +121,7 @@ public class OrderHeaderWindow {
             return;
         }
 
-        boolean success = OrderDA.updateOrderStatus(selected.getId(), "DELIVERED");
+        boolean success = OrderHeaderDA.editDeliveryStatus(selected.getId(), "DELIVERED");
         if (success) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order marked as delivered!", ButtonType.OK);
             alert.showAndWait();

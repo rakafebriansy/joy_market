@@ -6,9 +6,9 @@ import java.util.*;
 import joy_market.core.DBConnection;
 import joy_market.models.Order;
 
-public class OrderDA {
+public class OrderHeaderDA {
 
-    public static List<Order> getAllOrders() {
+    public static List<Order> getOrderHeader() {
         List<Order> list = new ArrayList<>();
         String sql = "SELECT * FROM orders";
         try (Connection conn = DBConnection.getConnection();
@@ -119,7 +119,7 @@ public class OrderDA {
         return orders;
     }
 
-    public static boolean updateOrderStatus(int orderId, String status) {
+    public static boolean editDeliveryStatus(int orderId, String status) {
         String sql = "UPDATE orders SET status = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

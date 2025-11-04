@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.*;
 import javafx.geometry.Insets;
-import joy_market.dataAccess.OrderDA;
+import joy_market.dataAccess.OrderHeaderDA;
 import joy_market.dataAccess.CourierDA;
 import joy_market.handlers.ProfileHandler;
 import joy_market.models.Order;
@@ -16,12 +16,12 @@ import joy_market.widgets.OrderTableItem;
 
 import java.util.List;
 
-public class CourierMainWindow {
+public class CourierWindow {
 
     private Courier courier;
     private ProfileHandler profileHandler = new ProfileHandler();
 
-    public CourierMainWindow(Courier courier) {
+    public CourierWindow(Courier courier) {
         this.courier = courier;
     }
 
@@ -56,7 +56,7 @@ public class CourierMainWindow {
             if (selected == null) return;
 
             if ("IN_PROGRESS".equals(selected.getStatus())) {
-                boolean success = OrderDA.updateOrderStatus(selected.getId(), "DELIVERED");
+                boolean success = OrderHeaderDA.editDeliveryStatus(selected.getId(), "DELIVERED");
                 if (success) {
                     refreshOrders(tblOrders);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order marked as delivered!", ButtonType.OK);
@@ -111,7 +111,7 @@ public class CourierMainWindow {
     }
 
     private void refreshOrders(TableView<OrderTableItem> tblOrders) {
-        List<Order> orders = OrderDA.getOrdersByCourierId(courier.getId());
+        List<Order> orders = OrderHeaderDA.getOrdersByCourierId(courier.getId());
         ObservableList<OrderTableItem> items = FXCollections.observableArrayList();
         for (Order o : orders) {
             items.add(new OrderTableItem(o));

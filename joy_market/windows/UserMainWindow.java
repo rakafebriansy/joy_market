@@ -51,7 +51,7 @@ public class ProductWindow {
             {
                 btnAdd.setOnAction(e -> {
                     Product p = getTableView().getItems().get(getIndex());
-                    CartDA.addProductToCart(user.getId(), p.getId(), 1);
+                    CartItemDA.saveDA(user.getId(), p.getId(), 1);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, p.getName() + " added to cart!", ButtonType.OK);
                     alert.showAndWait();
                 });
@@ -171,14 +171,14 @@ public class ProductWindow {
 
         tblCart.getColumns().addAll(colName, colCount, colPrice);
 
-        List<CartItem> items = CartDA.getCartItemsByUser(user.getId());
+        List<CartItem> items = CartItemDA.getCartItemsByUser(user.getId());
         tblCart.setItems(FXCollections.observableArrayList(items));
         
         Button btnRemoveItem = new Button("Remove Selected Item");
         btnRemoveItem.setOnAction(e -> {
             CartItem selected = tblCart.getSelectionModel().getSelectedItem();
             if (selected != null) {
-                boolean success = CartItemHandler.removeCartItem(selected.getId());
+                boolean success = CartItemHandler.deleteCartItem(selected.getId());
                 if (success) refreshCartTable(tblCart);
                 else showAlert("Failed to remove item!");
             }
@@ -201,11 +201,11 @@ public class ProductWindow {
             if (user.getBalance() >= total) {
                 user.setBalance(user.getBalance() - total);
                 
-                int orderId = OrderDA.insertOrder(user.getId(), total);
+                int orderId = OrderHeaderDA.insertOrder(user.getId(), total);
                 
                 for (CartItem item : items) {
                     Product p = ProductDA.read(item.getProductId());
-                    OrderDA.insertOrderItem(orderId, p.getId(), item.getCount(), p.getPrice());
+                    OrderHeaderDA.insertOrderItem(orderId, p.getId(), item.getCount(), p.getPrice());
                     
                     int newStock = p.getStock() - item.getCount();
                     if (newStock < 0) newStock = 0;
@@ -216,7 +216,7 @@ public class ProductWindow {
                 
                 boolean a = CustomerDA.updateUser(user);
                 System.out.println(a);
-                CartDA.clearCart(user.getId());
+                CartItemDA.clearCart(user.getId());
                 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Payment successful!", ButtonType.OK);
                 alert.showAndWait();
@@ -242,7 +242,7 @@ public class ProductWindow {
         cartStage.show();
     }
     private void refreshCartTable(TableView<CartItem> tblCart) {
-        List<CartItem> items = CartDA.getCartItemsByUser(this.user.getId());
+        List<CartItem> items = CartItemDA.getCartItemsByUser(this.user.getId());
         ObservableList<CartItem> obsItems = FXCollections.observableArrayList(items);
         tblCart.setItems(obsItems);
     }
