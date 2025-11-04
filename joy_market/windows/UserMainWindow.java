@@ -13,6 +13,7 @@ import joy_market.dataAccess.*;
 import joy_market.handlers.CartHandler;
 import joy_market.handlers.ProfileHandler;
 import joy_market.utils.Validator;
+import joy_market.widgets.OrderHistoryTableItem;
 
 public class UserMainWindow {
 
@@ -22,6 +23,8 @@ public class UserMainWindow {
     public UserMainWindow(User user) {
         this.user = user;
     }
+    
+    private TableView<Product> tblProducts;
 
     public void show(Stage stage) {
         OrderHistoryWindow orderHistoryWindow = new OrderHistoryWindow(user);
@@ -32,7 +35,7 @@ public class UserMainWindow {
         VBox orderRoot = new VBox(10);
         orderRoot.setPadding(new Insets(10));
 
-        TableView<Product> tblProducts = new TableView<>();
+        tblProducts = new TableView<>();
         TableColumn<Product, String> colName = new TableColumn<>("Name");
         colName.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getName()));
 
@@ -87,8 +90,6 @@ public class UserMainWindow {
                 if (amt <= 0) throw new Exception();
                 user.setBalance(user.getBalance() + amt);
                 boolean a = UserDA.updateUser(user);
-                System.out.println(a);
-                lblBalance.setText("Current Balance: " + user.getBalance());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Top up successful!", ButtonType.OK);
                 alert.showAndWait();
             } catch (Exception ex) {
@@ -205,6 +206,12 @@ public class UserMainWindow {
                 for (CartItem item : items) {
                     Product p = ProductDA.getProductById(item.getProductId());
                     OrderDA.insertOrderItem(orderId, p.getId(), item.getCount(), p.getPrice());
+                    
+                    int newStock = p.getStock() - item.getCount();
+                    if (newStock < 0) newStock = 0;
+                    p.setStock(newStock);
+                    
+                    ProductDA.updateProductStock(p.getId(), newStock);
                 }
                 
                 boolean a = UserDA.updateUser(user);
@@ -215,7 +222,14 @@ public class UserMainWindow {
                 alert.showAndWait();
                 cartStage.close();
                 
-                orderHistoryWindow.refresh();
+                if (tblProducts != null) {
+                    refresh();
+                }
+
+                if (orderHistoryWindow != null) {
+                    orderHistoryWindow.refresh();
+                }
+
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Insufficient balance!", ButtonType.OK);
                 alert.showAndWait();
@@ -236,5 +250,10 @@ public class UserMainWindow {
     private void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
         alert.showAndWait();
+    }
+    
+    public void refresh() {
+        List<Product> products = ProductDA.getAllProducts();
+        tblProducts.setItems(FXCollections.observableArrayList(products));
     }
 }

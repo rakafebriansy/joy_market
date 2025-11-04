@@ -111,5 +111,19 @@ public class ProductDA {
         }
         return null;
     }
+    
+    public static boolean updateProductStock(int productId, int newStock) {
+        String sql = "UPDATE products SET stock = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, newStock);
+            ps.setInt(2, productId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }
